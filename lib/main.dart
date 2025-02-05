@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -24,6 +25,21 @@ class _WeatherScreenState extends State<WeatherScreen> {
   String cityName = "Enter a city";
   String temperature = "--°C";
   String condition = "Unknown";
+  List<Map<String, String>> forecastData = [];
+
+  // Function to simulate fetching weather data
+  void _fetchWeather() {
+    setState(() {
+      cityName = _cityController.text.isNotEmpty ? _cityController.text : "Unknown City";
+      temperature = "${15 + Random().nextInt(16)}°C"; // Random temp between 15°C and 30°C
+      condition = ["Sunny", "Cloudy", "Rainy"][Random().nextInt(3)]; // Random condition
+    });
+  }
+
+  // Function to generate a random 7-day forecast
+
+  // Function to fetch and display the forecast
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +52,36 @@ class _WeatherScreenState extends State<WeatherScreen> {
           children: [
             TextField(
               controller: _cityController,
-              decoration: InputDecoration(labelText: "Enter city name"),
+              decoration: InputDecoration(
+                labelText: "Enter city name",
+                border: OutlineInputBorder(),
+              ),
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: _fetchWeather,
               child: Text("Fetch Weather"),
             ),
             SizedBox(height: 20),
             Text("City: $cityName", style: TextStyle(fontSize: 20)),
             Text("Temperature: $temperature", style: TextStyle(fontSize: 20)),
             Text("Condition: $condition", style: TextStyle(fontSize: 20)),
+            SizedBox(height: 20),
+           
+            SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                itemCount: forecastData.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(
+                      "${forecastData[index]['day']}: ${forecastData[index]['temperature']}, ${forecastData[index]['condition']}",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
