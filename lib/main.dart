@@ -37,9 +37,24 @@ class _WeatherScreenState extends State<WeatherScreen> {
   }
 
   // Function to generate a random 7-day forecast
+  List<Map<String, String>> _generateForecast() {
+    List<Map<String, String>> forecast = [];
+    for (int i = 1; i <= 7; i++) {
+      forecast.add({
+        "day": "Day $i",
+        "temperature": "${15 + Random().nextInt(16)}°C",
+        "condition": ["Sunny", "Cloudy", "Rainy"][Random().nextInt(3)]
+      });
+    }
+    return forecast;
+  }
 
   // Function to fetch and display the forecast
-
+  void _fetchForecast() {
+    setState(() {
+      forecastData = _generateForecast();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +82,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
             Text("Temperature: $temperature", style: TextStyle(fontSize: 20)),
             Text("Condition: $condition", style: TextStyle(fontSize: 20)),
             SizedBox(height: 20),
-           
+            ElevatedButton(
+              onPressed: _fetchForecast,
+              child: Text("Fetch 7-Day Forecast"),
+            ),
             SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
